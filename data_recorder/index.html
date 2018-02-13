@@ -81,7 +81,7 @@
 						data.data.push(dataEntry);
 					} else {
 						window.clearInterval(recordInterval);
-						saveAs(new Blob([JSON.stringify(data)]), "data_" + fileName + ".json");
+						saveAs(new Blob([JSON.stringify(data)], {type:"application/json"}), "data_" + fileName + ".json");
 						console.log("END");
 					}
 				},samplerate);
