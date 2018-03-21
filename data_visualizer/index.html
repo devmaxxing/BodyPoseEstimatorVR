@@ -53,7 +53,7 @@
 				var selected = document.getElementById("predictionInput").files[0];
 				var fileReader = new FileReader();
 				fileReader.onload = function (e) {
-					predictionFrames = JSON.parse(fileReader.result).data;
+					predictionFrames = JSON.parse(fileReader.result);
 				}
 				fileReader.readAsText(selected);
 			}
@@ -129,7 +129,16 @@
 					setTransform(right_hand, frame["RightHand"]);
 					if (predictionFrames.length == referenceFrames.length) {
 						prediction = predictionFrames[currentFrame];
-						setTransform(spinePrediction, prediction["Spine"]);
+						var predictionObject = {
+							"_x": prediction[0],
+							"_y": prediction[1],
+							"_z": prediction[2],
+							"_w": prediction[3],
+							"posX": prediction[4],
+							"posY": prediction[5],
+							"posZ": prediction[6]
+						}
+						setTransform(spinePrediction, predictionObject);
 					}
 				}
 				renderer.render( scene, camera );

@@ -4,6 +4,8 @@ from util.parser import Parser
 from util.Evaluator import Evaluator
 from numpy import array
 import sys
+import json
+import matplotlib.pyplot as plt
 
 inputLayer = Input(shape=(21,))
 hiddenLayer = Dense(14)(inputLayer)
@@ -21,7 +23,17 @@ inputDataTrain = array(p.Parse(dataFileTrain))
 print(inputDataTrain.shape)
 outputDataTrain = array(p.ParseSpine(dataFileTrain))
 print(outputDataTrain.shape)
-model.fit(inputDataTrain, outputDataTrain, 1)
+history = model.fit(inputDataTrain, outputDataTrain, 1, 100)
+
+print(history.history.keys())
+
+# summarize history for loss
+plt.plot(history.history['loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
 
 inputDataTest = array(p.Parse(dataFileTest))
 print(inputDataTest.shape)
@@ -36,6 +48,9 @@ print(model.predict(exampleValues, 1))
 
 e = Evaluator()
 test = model.predict(inputDataTest, 1)
+outputFile = open("predictions.json",'w')
+json.dump(array(test).tolist(), outputFile)
+outputFile.close()
 result, avg = e.Difference(outputDataTest, test)
 print("result is:")
 print(result)
