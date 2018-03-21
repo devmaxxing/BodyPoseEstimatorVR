@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	  <title>three.js webgl - loaders - BVHLoader</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				color: #fff;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+				font-weight: bold;
+				background-color: #000;
+				margin: 0px;
+				overflow: hidden;
+			}
+			#info {
+				position: absolute;
+				padding: 10px;
+				width: 100%;
+				text-align: center;
+				color: #000000;
+			}
+		</style>
+
+	</head>
+	<body>
+		<div id="info">
+			Reference: <input type="file" id="referenceInput" onchange="loadReference()">
+			<br>
+			Prediction: <input type="file" id="predictionInput" onchange="loadPrediction()">
+		</div>
+        <script src="three.min.js"></script>
+        <script src="OrbitControls.js"></script>
+		<script>
+			var clock = new THREE.Clock();
+			var camera, controls, scene, renderer;
+
+			var spine, spinePrediction, head, left_hand, right_hand;
+			var referenceFrames = [];
+			var predictionFrames = [];
+			var currentFrame = 0;
+			var count = 0;
+			var animateSpeed = 1/24;
+			var parsedResult;
+			var count = 0;
+			var stopTime = 0;
+			init();
+			animate();
+
+			function loadPrediction() {
+				var selected = document.getElementById("predictionInput").files[0];
+				var fileReader = new FileReader();
+				fileReader.onload = function (e) {
+					predictionFrames = JSON.parse(fileReader.result).data;
+				}
+				fileReader.readAsText(selected);
+			}
+
+			function loadReference() {
+				var selected = document.getElementById("referenceInput").files[0];
+				var fileReader = new FileReader();
+				fileReader.onload = function (e) {
+					referenceFrames = JSON.parse(fileReader.result).data;
+				}
+				fileReader.readAsText(selected);
+			}
+
+			function init() {
+				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
+				camera.position.set( 0, 200, 400 );
+				controls = new THREE.OrbitControls( camera );
+				controls.minDistance = 10;
+				controls.maxDistance = 700;
+				scene = new THREE.Scene();
+				scene.background = new THREE.Color( 0xeeeeee );
+				// White directional light at half intensity shining from the top.
+				var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+				scene.add( directionalLight );
+				scene.add( new THREE.GridHelper( 400, 10 ) );
+				// body mesh
+				var material = new THREE.MeshLambertMaterial({color: 0xffffff});
+				var material2 = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: true});
+				spinePrediction = new THREE.Mesh(new THREE.BoxGeometry(1, 3, 1), material2);
+				spine = new THREE.Mesh(new THREE.BoxGeometry(1, 3, 1), material);
+				head = new THREE.Mesh(new THREE.BoxGeometry(2, 2, 2), material);
+				left_hand = new THREE.Mesh(new THREE.BoxGeometry(1.5, 1.5, 1.5), material);
+				right_hand = new THREE.Mesh(new THREE.BoxGeometry(1.5, 1.5, 1.5), material);
+				scene.add(spinePrediction);
+				scene.add(spine);
+				scene.add(head);
+				scene.add(left_hand);
+				scene.add(right_hand);
+				// renderer
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				document.body.appendChild( renderer.domElement );
+				window.addEventListener( 'resize', onWindowResize, false );
+			}
+			function onWindowResize() {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+			}
+
+			function setTransform(a, b) {
+				a.quaternion.x = b._x;
+				a.quaternion.y = b._y;
+				a.quaternion.z = b._z;
+				a.quaternion.w = b._w;
+				a.position.x = b.posX;
+				a.position.y = b.posY;
+				a.position.z = b.posZ;
+			}
+
+			function animate() {
+				requestAnimationFrame( animate );
+				var delta = clock.getDelta();
+				count += delta;
+				if (referenceFrames.length > 0 && count >= animateSpeed) {
+					count = 0;
+					currentFrame = (currentFrame + 1)%referenceFrames.length;
+					frame = referenceFrames[currentFrame];
+					setTransform(spine, frame["Spine"]);
+					setTransform(head, frame["Head"]);
+					setTransform(left_hand, frame["LeftHand"]);
+					setTransform(right_hand, frame["RightHand"]);
+					if (predictionFrames.length == referenceFrames.length) {
+						prediction = predictionFrames[currentFrame];
+						setTransform(spinePrediction, prediction["Spine"]);
+					}
+				}
+				renderer.render( scene, camera );
+			}
+		</script>
+	</body>
+</html>
