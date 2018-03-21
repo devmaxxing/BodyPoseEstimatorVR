@@ -23,7 +23,7 @@ inputDataTrain = array(p.Parse(dataFileTrain))
 print(inputDataTrain.shape)
 outputDataTrain = array(p.ParseSpine(dataFileTrain))
 print(outputDataTrain.shape)
-history = model.fit(inputDataTrain, outputDataTrain, 1, 100)
+history = model.fit(inputDataTrain, outputDataTrain, 32, 200)
 
 print(history.history.keys())
 
@@ -42,15 +42,17 @@ print(outputDataTest.shape)
 loss_and_metrics = model.evaluate(inputDataTest, outputDataTest)
 print(loss_and_metrics)
 
-exampleValues = array([inputDataTest[1,:]])
-print(exampleValues)
-print(model.predict(exampleValues, 1))
-
-e = Evaluator()
+#test the model
 test = model.predict(inputDataTest, 1)
-outputFile = open("predictions.json",'w')
-json.dump(array(test).tolist(), outputFile)
-outputFile.close()
+
+#output prediction if output file is specified
+if len(sys.argv) > 3:
+    outputFile = open(sys.argv[3],'w')
+    json.dump(array(test).tolist(), outputFile)
+    outputFile.close()
+
+#calculate differences
+e = Evaluator()
 result, avg = e.Difference(outputDataTest, test)
 print("result is:")
 print(result)
