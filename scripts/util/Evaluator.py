@@ -9,7 +9,7 @@ class Evaluator:
         for i in range(len(actual)):
             diff.append([])
             for j in range(len(actual[0])):
-                diff[i].append(actual[i][j] - estimate[i][j])
+                diff[i].append(abs(actual[i][j] - estimate[i][j]))
                 avg[j] = avg[j] + diff[i][j]
         for i in range(7):
             avg[i] = avg[i]/len(actual)

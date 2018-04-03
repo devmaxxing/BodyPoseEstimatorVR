@@ -2,6 +2,7 @@ from keras.models import Model
 from keras.layers import Input, Dense
 from util.parser import Parser
 from util.Evaluator import Evaluator
+from util.Estimator import Estimator
 from numpy import array
 import sys
 import json
@@ -58,3 +59,11 @@ print("result is:")
 print(result)
 print("avg is:")
 print(avg)
+
+#output prediction to specified file based on algorithmic estimator
+esti = Estimator()
+result = esti.Estimate(inputDataTest)
+if len(sys.argv) > 4:
+    outputFile = open(sys.argv[4],'w')
+    json.dump(array(result).tolist(), outputFile)
+    outputFile.close()
