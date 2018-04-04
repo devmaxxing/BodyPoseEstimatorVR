@@ -5,11 +5,11 @@ class Estimator:
         result = []
         for i in range(len(data)):
             result.append([])
-            quaternion = (data[i][0], data[i][1], data[i][2], data[i][3])
+            quaternion = (data[i][0], data[i][1], data[i][2],data[i][3])
             euler = transformations.euler_from_quaternion(quaternion)
             L = list(euler)
             L[0] = 0
-            L[1] = 0
+            L[2] = 0
             newQuat = transformations.quaternion_from_euler(L[0], L[1], L[2])
             
 

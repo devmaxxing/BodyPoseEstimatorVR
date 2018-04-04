@@ -7,13 +7,20 @@ from numpy import array
 import sys
 import json
 import matplotlib.pyplot as plt
+import keras.backend as K
+
+def weighted_mean_squared_error(y_true, y_pred):
+    difference = y_pred - y_true
+    weights = array([20, 20, 20, 20, 1, 1, 1])
+    return K.mean(K.square((difference*weights)), axis=-1)
 
 inputLayer = Input(shape=(21,))
-hiddenLayer = Dense(14)(inputLayer)
-outputLayer = Dense(7)(hiddenLayer)
+hiddenLayer1 = Dense(20)(inputLayer)
+hiddenLayer2 = Dense(14)(hiddenLayer1)
+outputLayer = Dense(7)(hiddenLayer2)
 model = Model(inputs=inputLayer, outputs=outputLayer)
 model.compile(optimizer='adam',
-              loss='mean_squared_error',
+              loss=weighted_mean_squared_error,
               metrics=['accuracy'])
 
 p = Parser()
@@ -24,7 +31,7 @@ inputDataTrain = array(p.Parse(dataFileTrain))
 print(inputDataTrain.shape)
 outputDataTrain = array(p.ParseSpine(dataFileTrain))
 print(outputDataTrain.shape)
-history = model.fit(inputDataTrain, outputDataTrain, 32, 200)
+history = model.fit(inputDataTrain, outputDataTrain, 32, 2000)
 
 print(history.history.keys())
 

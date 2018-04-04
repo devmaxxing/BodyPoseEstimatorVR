@@ -137,8 +137,10 @@
 							"posX": prediction[4],
 							"posY": prediction[5],
 							"posZ": prediction[6]
-						}
+						};
 						setTransform(spinePrediction, predictionObject);
+						console.log("Prediction rotation " + currentFrame + ": " + JSON.stringify(spinePrediction.rotation));
+						console.log("Head rotation " + currentFrame + ": " + JSON.stringify(head.rotation));
 					}
 				}
 				renderer.render( scene, camera );
