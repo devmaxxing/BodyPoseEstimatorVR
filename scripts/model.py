@@ -61,16 +61,23 @@ if len(sys.argv) > 3:
 
 #calculate differences
 e = Evaluator()
-result, avg = e.Difference(outputDataTest, test)
-print("result is:")
-print(result)
-print("avg is:")
-print(avg)
+result, avg, maxdiff = e.Difference(outputDataTest, test)
+print("max: " + str(maxdiff))
+print("sum max: " + str(sum(maxdiff)))
+print("avg: " + str(avg))
+print("sum avg: " + str(sum(avg)))
 
 #output prediction to specified file based on algorithmic estimator
 esti = Estimator()
-result = esti.Estimate(inputDataTest)
+estimate = esti.Estimate(inputDataTest)
+result, avg, maxdiff = e.Difference(estimate, test)
+
+print("max estimate: " + str(maxdiff))
+print("sum max estimate: " + str(sum(maxdiff)))
+print("avg estimate: " + str(avg))
+print("sum avg estimate: " + str(sum(avg)))
+
 if len(sys.argv) > 4:
     outputFile = open(sys.argv[4],'w')
-    json.dump(array(result).tolist(), outputFile)
+    json.dump(array(estimate).tolist(), outputFile)
     outputFile.close()

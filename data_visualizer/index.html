@@ -115,6 +115,12 @@
 				a.position.z = b.posZ;
 			}
 
+			function eulerFromQuaternion(x,y,z,w) {
+				var quat = new THREE.Quaternion(x,y,z,w);
+				var euler = new THREE.Euler().setFromQuaternion(quat);
+				return euler;
+			}
+
 			function animate() {
 				requestAnimationFrame( animate );
 				var delta = clock.getDelta();
@@ -139,8 +145,6 @@
 							"posZ": prediction[6]
 						};
 						setTransform(spinePrediction, predictionObject);
-						console.log("Prediction rotation " + currentFrame + ": " + JSON.stringify(spinePrediction.rotation));
-						console.log("Head rotation " + currentFrame + ": " + JSON.stringify(head.rotation));
 					}
 				}
 				renderer.render( scene, camera );
