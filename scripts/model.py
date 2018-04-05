@@ -20,7 +20,7 @@ hiddenLayer2 = Dense(14)(hiddenLayer1)
 outputLayer = Dense(7)(hiddenLayer2)
 model = Model(inputs=inputLayer, outputs=outputLayer)
 model.compile(optimizer='adam',
-              loss=weighted_mean_squared_error,
+              loss='mean_squared_error',
               metrics=['accuracy'])
 
 p = Parser()
