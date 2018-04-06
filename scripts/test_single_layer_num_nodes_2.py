@@ -15,26 +15,25 @@ def weighted_mean_squared_error(y_true, y_pred):
     return K.mean(K.square((difference*weights)), axis=-1)
 
 outputFile = open(sys.argv[3],'w')
-outputFile.write("Trial Number,5 nodes rot_avg,5 nodes rot_max,5 nodes pos_avg,5 nodes pos_max,"+ 
-"10 nodes rot_avg,10 nodes rot_max,10 nodes pos_avg,10 nodes pos_max,"+ 
-"15 nodes rot_avg,15 nodes rot_max,15 nodes pos_avg,15 nodes pos_max,"+ 
-"20 nodes rot_avg,20 nodes rot_max,20 nodes pos_avg,20 nodes pos_max,"+ 
-"25 nodes rot_avg,25 nodes rot_max,25 nodes pos_avg,25 nodes pos_max,"+ 
-"30 nodes rot_avg,30 nodes rot_max,30 nodes pos_avg,30 nodes pos_max,"+
-"35 nodes rot_avg,35 nodes rot_max,35 nodes pos_avg,35 nodes pos_max,"+
-"40 nodes rot_avg,40 nodes rot_max,40 nodes pos_avg,40 nodes pos_max,"+
-"45 nodes rot_avg,45 nodes rot_max,45 nodes pos_avg,45 nodes pos_max,"+
-"50 nodes rot_avg,50 nodes rot_max,50 nodes pos_avg,50 nodes pos_max,"+"\n")
+outputFile.write("Trial Number,7 nodes rot_avg,7 nodes rot_max,7 nodes pos_avg,7 nodes pos_max,"+ 
+"Trial Number,8 nodes rot_avg,8 nodes rot_max,8 nodes pos_avg,8 nodes pos_max,"+ 
+"Trial Number,9 nodes rot_avg,9 nodes rot_max,9 nodes pos_avg,9 nodes pos_max,"+ 
+"Trial Number,10 nodes rot_avg,10 nodes rot_max,10 nodes pos_avg,10 nodes pos_max,"+ 
+"Trial Number,11 nodes rot_avg,11 nodes rot_max,11 nodes pos_avg,11 nodes pos_max,"+ 
+"Trial Number,12 nodes rot_avg,12 nodes rot_max,12 nodes pos_avg,12 nodes pos_max,"+ 
+"Trial Number,13 nodes rot_avg,13 nodes rot_max,13 nodes pos_avg,13 nodes pos_max,"+ 
+"Trial Number,14 nodes rot_avg,14 nodes rot_max,14 nodes pos_avg,14 nodes pos_max,"+ 
+"Trial Number,15 nodes rot_avg,15 nodes rot_max,15 nodes pos_avg,15 nodes pos_max,"+ 
+"\n")
 
 for num_trial in range(1,4):
     print("Trial " + str(num_trial))
     outputFile.write(str(num_trial) + ",")
-    for num_nodes in range(5,55,5):
+    for num_nodes in range(7,16):
         print(str(num_nodes) + " node layer...")
         inputLayer = Input(shape=(21,))
         hiddenLayer1 = Dense(num_nodes)(inputLayer)
-        hiddenLayer2 = Dense(11)(hiddenLayer1)
-        outputLayer = Dense(7)(hiddenLayer2)
+        outputLayer = Dense(7)(hiddenLayer1)
         model = Model(inputs=inputLayer, outputs=outputLayer)
         model.compile(optimizer='adam',
                     loss='mean_squared_error',
