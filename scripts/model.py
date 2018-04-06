@@ -35,24 +35,9 @@ print(inputDataTrain.shape)
 outputDataTrain = array(p.ParseSpine(dataFileTrain))
 print(outputDataTrain.shape)
 
-class TFCheckpointCallback(keras.callbacks.Callback):
-    def __init__(self, saver, sess):
-        self.saver = saver
-        self.sess = sess
-        self.count = 0
-
-    def on_epoch_end(self, epoch, logs=None):
-        self.count += 1
-        if self.count == 200:
-            self.saver.save(self.sess, 'freeze/checkpoint.ckpt', global_step=epoch)
-
-tf_graph = K.get_session().graph
-tf_saver = tf.train.Saver()
-tfckptcb = TFCheckpointCallback(tf_saver, K.get_session())
-
-history = model.fit(inputDataTrain, outputDataTrain, 32, 200, callbacks=[tfckptcb])
-
-print(history.history.keys())
+history = model.fit(inputDataTrain, outputDataTrain, 32, 2000)
+print(model.outputs)
+[print(n.name) for n in K.get_session().graph.as_graph_def().node]
 
 # summarize history for loss
 plt.plot(history.history['loss'])
@@ -61,6 +46,24 @@ plt.ylabel('loss')
 plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc='upper left')
 plt.show()
+
+#export the model
+export_path = "freeze"
+tf.train.Saver().save(K.get_session(), './freeze/checkpoint.ckpt')
+
+tf.train.write_graph(K.get_session().graph.as_graph_def(),
+                     'freeze', 'graph.pbtxt', as_text=True)
+tf.train.write_graph(K.get_session().graph.as_graph_def(),
+                     'freeze', 'graph.pb', as_text=False)
+
+freeze_graph.freeze_graph(input_graph = export_path +'/graph.pbtxt',
+              input_binary = False,
+              input_checkpoint = './freeze/checkpoint.ckpt',
+              output_node_names = "dense_2/BiasAdd",
+              output_graph = export_path +'/model.bytes' ,
+              clear_devices = True, initializer_nodes = "",input_saver = "",
+              restore_op_name = "save/restore_all", filename_tensor_name = "save/Const:0")
+
 
 inputDataTest = array(p.Parse(dataFileTest))
 print(inputDataTest.shape)
@@ -101,26 +104,7 @@ if len(sys.argv) > 4:
     json.dump(array(estimate).tolist(), outputFile)
     outputFile.close()
 
-#export the model
-export_path = "../models"
-K.set_learning_phase(0)
-config = model.get_config()
-weights = model.get_weights()
-new_model = Model.from_config(config)
-new_model.set_weights(weights)
- 
-tf.saved_model.simple_save( K.get_session(),
-                            export_path,
-                            inputs={'input': new_model.inputs[0]},
-                            outputs={'output': new_model.outputs[0]})
 
-freeze_graph.freeze_graph(input_graph = export_path +'/saved_model.pb',
-              input_binary = True,
-              input_checkpoint = './freeze/checkpoint.ckpt',
-              output_node_names = "action",
-              output_graph = export_path +'/saved_model.bytes' ,
-              clear_devices = True, initializer_nodes = "",input_saver = "",
-              restore_op_name = "save/restore_all", filename_tensor_name = "save/Const:0")
 
  
 
