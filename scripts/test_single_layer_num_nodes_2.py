@@ -16,14 +16,14 @@ def weighted_mean_squared_error(y_true, y_pred):
 
 outputFile = open(sys.argv[3],'w')
 outputFile.write("Trial Number,7 nodes rot_avg,7 nodes rot_max,7 nodes pos_avg,7 nodes pos_max,"+ 
-"Trial Number,8 nodes rot_avg,8 nodes rot_max,8 nodes pos_avg,8 nodes pos_max,"+ 
-"Trial Number,9 nodes rot_avg,9 nodes rot_max,9 nodes pos_avg,9 nodes pos_max,"+ 
-"Trial Number,10 nodes rot_avg,10 nodes rot_max,10 nodes pos_avg,10 nodes pos_max,"+ 
-"Trial Number,11 nodes rot_avg,11 nodes rot_max,11 nodes pos_avg,11 nodes pos_max,"+ 
-"Trial Number,12 nodes rot_avg,12 nodes rot_max,12 nodes pos_avg,12 nodes pos_max,"+ 
-"Trial Number,13 nodes rot_avg,13 nodes rot_max,13 nodes pos_avg,13 nodes pos_max,"+ 
-"Trial Number,14 nodes rot_avg,14 nodes rot_max,14 nodes pos_avg,14 nodes pos_max,"+ 
-"Trial Number,15 nodes rot_avg,15 nodes rot_max,15 nodes pos_avg,15 nodes pos_max,"+ 
+"8 nodes rot_avg,8 nodes rot_max,8 nodes pos_avg,8 nodes pos_max,"+ 
+"9 nodes rot_avg,9 nodes rot_max,9 nodes pos_avg,9 nodes pos_max,"+ 
+"10 nodes rot_avg,10 nodes rot_max,10 nodes pos_avg,10 nodes pos_max,"+ 
+"11 nodes rot_avg,11 nodes rot_max,11 nodes pos_avg,11 nodes pos_max,"+ 
+"12 nodes rot_avg,12 nodes rot_max,12 nodes pos_avg,12 nodes pos_max,"+ 
+"13 nodes rot_avg,13 nodes rot_max,13 nodes pos_avg,13 nodes pos_max,"+ 
+"14 nodes rot_avg,14 nodes rot_max,14 nodes pos_avg,14 nodes pos_max,"+ 
+"15 nodes rot_avg,15 nodes rot_max,15 nodes pos_avg,15 nodes pos_max,"+ 
 "\n")
 
 for num_trial in range(1,4):

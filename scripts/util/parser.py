@@ -67,6 +67,25 @@ class Parser:
 
         return result
 
+    def ParseSpineRotation(self, fileName): #returns list of length = frame count. each elem is list of length 4 (spine quaternion only)
+        file = open(fileName)
+        self.data = json.load(file)
+        file.close()
+        result = list()
+        currentFrame = list()
+        
+        self.data = self.data["data"]
+
+        for i in range (len(self.data)):
+            currentFrame = []
+            currentFrame.append(self.data[i]["Spine"]["_x"])
+            currentFrame.append(self.data[i]["Spine"]["_y"])
+            currentFrame.append(self.data[i]["Spine"]["_z"])
+            currentFrame.append(self.data[i]["Spine"]["_w"])
+            result.append(currentFrame)
+
+        return result
+
     def ParseWithSpine(self, fileName): #returns list of length = frame count. each elem is a list of length 28 (all input including spine of previous frame)
         file = open(fileName)
         self.data = json.load(file)
