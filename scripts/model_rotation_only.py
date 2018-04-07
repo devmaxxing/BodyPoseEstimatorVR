@@ -1,5 +1,5 @@
-from keras.models import Model
-from keras.layers import Input, Dense
+from keras.models import Model, Sequential
+from keras.layers import Input, Dense, Dropout
 from util.parser import Parser
 from util.Evaluator import Evaluator
 from util.Estimator import Estimator
@@ -18,10 +18,12 @@ def weighted_mean_squared_error(y_true, y_pred):
     weights = array([20, 20, 20, 20, 1, 1, 1])
     return K.mean(K.square((difference*weights)), axis=-1)
 
-inputLayer = Input(shape=(21,))
-hiddenLayer1 = Dense(11)(inputLayer)
-outputLayer = Dense(4)(hiddenLayer1)
-model = Model(inputs=inputLayer, outputs=outputLayer)
+model = Sequential()
+model.add(Dense(11, input_shape = (21,)))
+#model.add(Dropout(0.2))
+#model.add(Dense(11))
+model.add(Dense(3))
+
 model.compile(optimizer='adam',
               loss='mean_squared_error',
               metrics=['accuracy'])
@@ -79,9 +81,9 @@ if len(sys.argv) > 3:
 e = Evaluator()
 result, avg, maxdiff = e.Difference(outputDataTest, test)
 print("max: " + str(maxdiff))
-print("sum max: " + str(sum(maxdiff)))
+print("sum max: " + str(sum(maxdiff[:3])))
 print("avg: " + str(avg))
-print("sum avg: " + str(sum(avg)))
+print("sum avg: " + str(sum(avg[:3])))
 
 #output prediction to specified file based on algorithmic estimator
 esti = Estimator()
@@ -89,9 +91,9 @@ estimate = esti.Estimate(inputDataTest)
 result, avg, maxdiff = e.Difference(outputDataTest, estimate)
 
 print("max estimate: " + str(maxdiff))
-print("sum max estimate: " + str(sum(maxdiff)))
+print("sum max estimate: " + str(sum(maxdiff[:3])))
 print("avg estimate: " + str(avg))
-print("sum avg estimate: " + str(sum(avg)))
+print("sum avg estimate: " + str(sum(avg[:3])))
 
 if len(sys.argv) > 4:
     outputFile = open(sys.argv[4],'w')
