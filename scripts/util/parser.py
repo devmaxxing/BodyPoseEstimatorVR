@@ -13,7 +13,7 @@ class Parser:
         
         self.data = self.data["data"]
 
-        for i in range (len(self.data)):
+        for i in range (1, len(self.data)):
             currentFrame = []
             currentFrame.append(self.data[i]["Head"]["_x"])
             currentFrame.append(self.data[i]["Head"]["_y"])
@@ -43,7 +43,7 @@ class Parser:
             result.append(currentFrame)
 
         return result
-
+    
     def ParseSpine(self, fileName): #returns list of length = frame count. each elem is list of length 7 (spine only)
         file = open(fileName)
         self.data = json.load(file)
@@ -53,7 +53,7 @@ class Parser:
         
         self.data = self.data["data"]
 
-        for i in range (len(self.data)):
+        for i in range (1, len(self.data)):
             currentFrame = []
             currentFrame.append(self.data[i]["Spine"]["_x"])
             currentFrame.append(self.data[i]["Spine"]["_y"])
@@ -76,7 +76,7 @@ class Parser:
         
         self.data = self.data["data"]
 
-        for i in range (len(self.data)):
+        for i in range (1, len(self.data)):
             currentFrame = []
             currentFrame.append(self.data[i]["Spine"]["_x"])
             currentFrame.append(self.data[i]["Spine"]["_y"])
@@ -94,7 +94,7 @@ class Parser:
         
         self.data = self.data["data"]
 
-        for i in range (len(self.data)):
+        for i in range (1, len(self.data)):
             currentFrame = []
             currentFrame.append(self.data[i]["Spine"]["_x"])
             currentFrame.append(self.data[i]["Spine"]["_y"])
@@ -143,12 +143,8 @@ class Parser:
             currentFrame.append(self.data[i-1]["Spine"]["_x"])
             currentFrame.append(self.data[i-1]["Spine"]["_y"])
             currentFrame.append(self.data[i-1]["Spine"]["_z"])
-            currentFrame.append(self.data[i-1]["Spine"]["_w"])
-            currentFrame.append(self.data[i-1]["Spine"]["posX"])
-            currentFrame.append(self.data[i-1]["Spine"]["posY"])
-            currentFrame.append(self.data[i-1]["Spine"]["posZ"])
-
 
             result.append(currentFrame)
 
         return result
+    
