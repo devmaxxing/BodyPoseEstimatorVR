@@ -19,7 +19,7 @@ def weighted_mean_squared_error(y_true, y_pred):
 
 outputFile = open(sys.argv[3],'w')
 outputFile.write("Training data: " + sys.argv[1] + "\n")
-outputFile.write("Testing data: " + sys.argv[1] + "\n")
+outputFile.write("Testing data: " + sys.argv[2] + "\n")
 outputFile.write("Trial Number,5 nodes rot_avg,5 nodes rot_max,"+ 
 "10 nodes rot_avg,10 nodes rot_max,"+ 
 "15 nodes rot_avg,15 nodes rot_max,"+ 
