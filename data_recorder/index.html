@@ -28,8 +28,8 @@
 	<body>
 
 		<div id="info">
-			<a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> - BVH Loader -
-			animation from <a href="http://mocap.cs.cmu.edu/">http://mocap.cs.cmu.edu/</a>
+			BVH file: <input type="file" id="bvhInput" onchange="loadModel()">
+			Normalize: <input type="checkbox" id="normalizeCheck">
 		</div>
         <script src="three.min.js"></script>
         <script src="OrbitControls.js"></script>
@@ -46,48 +46,91 @@
 			init();
 			animate();
 			var loader = new THREE.BVHLoader();
-			var fileName = "14_20";
-			loader.load( "models/" + fileName + ".bvh", function( result ) {
-                
-                
-				skeletonHelper = new THREE.SkeletonHelper( result.skeleton.bones[ 0 ] );
-				skeletonHelper.skeleton = result.skeleton; // allow animation mixer to bind to SkeletonHelper directly
-				var boneContainer = new THREE.Group();
-				boneContainer.add( result.skeleton.bones[ 0 ] );
-				scene.add( skeletonHelper );
-				scene.add( boneContainer );
-				// play animation
-                mixer = new THREE.AnimationMixer( skeletonHelper );
-                parsedResult = result;
-				
-				stopTime = result.clip.duration * 1000;
 
-				//sample bone transform information
-				const filterBones = new Set(["Head","LeftHand","RightHand","Spine"]);
+			function loadModel() {
+				var selected = document.getElementById("bvhInput").files[0];
+				var normalize = document.getElementById("normalizeCheck").checked;
+				console.log(normalize);
+				console.log(selected.name);
+				loader.load("models/" + selected.name, function( result ) {
+					skeletonHelper = new THREE.SkeletonHelper( result.skeleton.bones[ 0 ] );
+					skeletonHelper.skeleton = result.skeleton; // allow animation mixer to bind to SkeletonHelper directly
+					var boneContainer = new THREE.Group();
+					boneContainer.add( result.skeleton.bones[ 0 ] );
+					scene.add( skeletonHelper );
+					scene.add( boneContainer );
+					// play animation
+					mixer = new THREE.AnimationMixer( skeletonHelper );
+					parsedResult = result;
+					
+					stopTime = result.clip.duration * 1000;
 
-				var samplerate = 1000/24;
-				var recordInterval = setInterval(function() {
-					count += samplerate;
-					if (count < stopTime) {
-						var dataEntry = {};
-						for(bone of skeletonHelper.skeleton.bones) {
-							if(filterBones.has(bone.name)) {
-								dataEntry[bone.name] = bone.getWorldQuaternion();
-								dataEntry[bone.name]['posX'] = bone.getWorldPosition().x;
-								dataEntry[bone.name]['posY'] = bone.getWorldPosition().y;
-								dataEntry[bone.name]['posZ'] = bone.getWorldPosition().z;
+					//sample bone transform information
+					const filterBones = new Set(["Head","LeftHand","RightHand","Spine"]);
+
+					var samplerate = 1000/24;
+					var recordInterval = setInterval(function() {
+						count += samplerate;
+						if (count < stopTime) {
+							var dataEntry = {};
+							var headIndex = -1;
+							for (var i = 0; i < skeletonHelper.skeleton.bones.length; i++) {
+								if (skeletonHelper.skeleton.bones[i].name == "Head") {
+									headIndex = i;
+									break;
+								}
 							}
-						}
-						data.data.push(dataEntry);
-					} else {
-						window.clearInterval(recordInterval);
-						saveAs(new Blob([JSON.stringify(data)], {type:"application/json"}), "data_" + fileName + ".json");
-						console.log("END");
-					}
-				},samplerate);
+							for(bone of skeletonHelper.skeleton.bones) {
+								if (filterBones.has(bone.name)) {
+									var quaternion = bone.getWorldQuaternion();
+									var posX = bone.getWorldPosition().x;
+									var posY = bone.getWorldPosition().y;
+									var posZ = bone.getWorldPosition().z;
 
-				mixer.clipAction( result.clip ).setEffectiveWeight( 1.0 ).play();
-			} );
+									if (normalize) {
+										//normalize rotations and positions with respect to head
+										var head = skeletonHelper.skeleton.bones[headIndex];
+										var headRotation = new THREE.Euler().setFromQuaternion(head.getWorldQuaternion());
+										var headPosition = head.getWorldPosition();
+										
+										var s = Math.sin(headRotation.y);
+										var c = Math.cos(headRotation.y);
+										posX -= headPosition.x;
+										posZ -= headPosition.z;
+
+										var newPosX = posX*c - posZ*s;
+										var newPosZ = posX*s + posZ*c;
+
+										posX = newPosX;
+										posZ = newPosZ;
+
+										var euler = new THREE.Euler();
+										euler.setFromQuaternion(quaternion);
+										euler.y -= headRotation.y;
+										quaternion = new THREE.Quaternion().setFromEuler(euler);
+									}
+
+									dataEntry[bone.name] = quaternion;
+									dataEntry[bone.name]['posX'] = posX;
+									dataEntry[bone.name]['posY'] = posY;
+									dataEntry[bone.name]['posZ'] = posZ;
+								}
+							}
+							data.data.push(dataEntry);
+						} else {
+							window.clearInterval(recordInterval);
+							var outputFile =  "data_" + selected.name + ".json";
+							if (normalize)
+								outputFile =   "data_" + selected.name + "_normalized.json";
+							saveAs(new Blob([JSON.stringify(data)], {type:"application/json"}), outputFile);
+							console.log("END");
+						}
+					},samplerate);
+
+					mixer.clipAction( result.clip ).setEffectiveWeight( 1.0 ).play();
+					animate();
+				} );
+			}
 
 			function init() {
 				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );

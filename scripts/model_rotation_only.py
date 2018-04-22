@@ -20,8 +20,6 @@ def weighted_mean_squared_error(y_true, y_pred):
 
 model = Sequential()
 model.add(Dense(11, input_shape = (21,)))
-#model.add(Dropout(0.2))
-#model.add(Dense(11))
 model.add(Dense(3))
 
 model.compile(optimizer='adam',
@@ -35,8 +33,9 @@ dataFileTest = sys.argv[2]
 inputDataTrain = array(p.Parse(dataFileTrain))
 outputDataTrain = array(p.ParseSpineRotation(dataFileTrain))
 
-history = model.fit(inputDataTrain, outputDataTrain, 32, 2000)
-
+history = model.fit(inputDataTrain, outputDataTrain, 32, 1000)
+print(model.outputs)
+[print(n.name) for n in K.get_session().graph.as_graph_def().node]
 # summarize history for loss
 # plt.plot(history.history['loss'])
 # plt.title('model loss')
@@ -46,21 +45,21 @@ history = model.fit(inputDataTrain, outputDataTrain, 32, 2000)
 # plt.show()
 
 #export the model
-# export_path = "freeze_rot"
-# tf.train.Saver().save(K.get_session(), export_path + '/checkpoint.ckpt')
+export_path = "freeze_rot"
+tf.train.Saver().save(K.get_session(), export_path + '/checkpoint.ckpt')
 
-# tf.train.write_graph(K.get_session().graph.as_graph_def(),
-#                      export_path, 'graph.pbtxt', as_text=True)
-# tf.train.write_graph(K.get_session().graph.as_graph_def(),
-#                      export_path, 'graph.pb', as_text=False)
+tf.train.write_graph(K.get_session().graph.as_graph_def(),
+                     export_path, 'graph.pbtxt', as_text=True)
+tf.train.write_graph(K.get_session().graph.as_graph_def(),
+                     export_path, 'graph.pb', as_text=False)
 
-# freeze_graph.freeze_graph(input_graph = export_path +'/graph.pbtxt',
-#               input_binary = False,
-#               input_checkpoint = export_path + '/checkpoint.ckpt',
-#               output_node_names = "dense_2/BiasAdd",
-#               output_graph = export_path +'/model.bytes' ,
-#               clear_devices = True, initializer_nodes = "",input_saver = "",
-#               restore_op_name = "save/restore_all", filename_tensor_name = "save/Const:0")
+freeze_graph.freeze_graph(input_graph = export_path +'/graph.pbtxt',
+              input_binary = False,
+              input_checkpoint = export_path + '/checkpoint.ckpt',
+              output_node_names = "dense_2/BiasAdd",
+              output_graph = export_path +'/model.bytes' ,
+              clear_devices = True, initializer_nodes = "",input_saver = "",
+              restore_op_name = "save/restore_all", filename_tensor_name = "save/Const:0")
 
 
 inputDataTest = array(p.Parse(dataFileTest))
