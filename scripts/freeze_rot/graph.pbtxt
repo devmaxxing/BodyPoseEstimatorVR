@@ -112,7 +112,7 @@ node {
   attr {
     key: "seed2"
     value {
-      i: 1726193
+      i: 7666122
     }
   }
 }
@@ -478,7 +478,7 @@ node {
   attr {
     key: "seed2"
     value {
-      i: 3865161
+      i: 4429035
     }
   }
 }

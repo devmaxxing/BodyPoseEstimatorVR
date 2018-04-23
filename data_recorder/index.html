@@ -43,6 +43,8 @@
 			var count = 0;
 			var stopTime = 0;
 			var data = {'data':[]};
+			var normalizedHead, normalizedSpine, normalizedLeft, normalizedRight, headDirectionVector, pivotPoint;
+			var forward = new THREE.Vector3(0, 0, 1);
 			init();
 			animate();
 			var loader = new THREE.BVHLoader();
@@ -80,42 +82,79 @@
 									break;
 								}
 							}
+							var head = skeletonHelper.skeleton.bones[headIndex];
+							var headDirection = head.getWorldDirection();
+							var headPosition = head.getWorldPosition();
+
 							for(bone of skeletonHelper.skeleton.bones) {
 								if (filterBones.has(bone.name)) {
-									var quaternion = bone.getWorldQuaternion();
-									var posX = bone.getWorldPosition().x;
-									var posY = bone.getWorldPosition().y;
-									var posZ = bone.getWorldPosition().z;
-
+									var quaternion = new THREE.Quaternion().copy(bone.getWorldQuaternion());
+									var position = bone.getWorldPosition().clone();
 									if (normalize) {
-										//normalize rotations and positions with respect to head
-										var head = skeletonHelper.skeleton.bones[headIndex];
-										var headRotation = new THREE.Euler().setFromQuaternion(head.getWorldQuaternion());
-										var headPosition = head.getWorldPosition();
-										
-										var s = Math.sin(headRotation.y);
-										var c = Math.cos(headRotation.y);
-										posX -= headPosition.x;
-										posZ -= headPosition.z;
+										//normalize y rotations and x and z positions with respect to head
+										position.x -= headPosition.x;
+										position.z -= headPosition.z;
 
-										var newPosX = posX*c - posZ*s;
-										var newPosZ = posX*s + posZ*c;
+										var objectToUpdate = null;
+										switch (bone.name) {
+											case "Head":
+												objectToUpdate = normalizedHead;
+												break;
+											case "Spine":
+												objectToUpdate = normalizedSpine;
+												break;
+											case "LeftHand": 
+												objectToUpdate = normalizedLeft;
+												break;
+											case "RightHand":
+												objectToUpdate = normalizedRight; 
+												break;
+										}
+										objectToUpdate.position.x = position.x;
+										objectToUpdate.position.y = position.y;
+										objectToUpdate.position.z = position.z;
 
-										posX = newPosX;
-										posZ = newPosZ;
-
-										var euler = new THREE.Euler();
-										euler.setFromQuaternion(quaternion);
-										euler.y -= headRotation.y;
-										quaternion = new THREE.Quaternion().setFromEuler(euler);
+										objectToUpdate.quaternion._x = quaternion._x;
+										objectToUpdate.quaternion._y = quaternion._y;
+										objectToUpdate.quaternion._z = quaternion._z;
+										objectToUpdate.quaternion._w = quaternion._w;
+									} else {
+										dataEntry[bone.name] = quaternion;
+										dataEntry[bone.name]['posX'] = position.x;
+										dataEntry[bone.name]['posY'] = position.y;
+										dataEntry[bone.name]['posZ'] = position.z;
 									}
-
-									dataEntry[bone.name] = quaternion;
-									dataEntry[bone.name]['posX'] = posX;
-									dataEntry[bone.name]['posY'] = posY;
-									dataEntry[bone.name]['posZ'] = posZ;
 								}
 							}
+							if (normalize) {
+								pivotPoint.lookAt(new THREE.Vector3(-1* headDirection.x, 0, headDirection.z));
+								for(bone of skeletonHelper.skeleton.bones) {
+									if (filterBones.has(bone.name)) {
+										var object = null;
+										switch (bone.name) {
+											case "Head":
+												object = normalizedHead;
+												break;
+											case "Spine":
+												object = normalizedSpine;
+												break;
+											case "LeftHand": 
+												object = normalizedLeft;
+												break;
+											case "RightHand":
+												object = normalizedRight; 
+												break;
+										}
+										var quaternion = object.getWorldQuaternion();
+										var position = object.getWorldPosition();
+										dataEntry[bone.name] = quaternion;
+										dataEntry[bone.name]['posX'] = position.x;
+										dataEntry[bone.name]['posY'] = position.y;
+										dataEntry[bone.name]['posZ'] = position.z;
+									}
+								}
+							}
+
 							data.data.push(dataEntry);
 						} else {
 							window.clearInterval(recordInterval);
@@ -141,6 +180,19 @@
 				scene = new THREE.Scene();
 				scene.background = new THREE.Color( 0xeeeeee );
 				scene.add( new THREE.GridHelper( 400, 10 ) );
+				var material = new THREE.MeshLambertMaterial({color: 0xffffff});
+				normalizedSpine = new THREE.Mesh(new THREE.BoxGeometry(1, 3, 1), material);
+				normalizedHead = new THREE.Mesh(new THREE.BoxGeometry(2, 2, 2), material);
+				normalizedLeft = new THREE.Mesh(new THREE.BoxGeometry(1.5, 1.5, 1.5), material);
+				normalizedRight = new THREE.Mesh(new THREE.BoxGeometry(1.5, 1.5, 1.5), material);
+				
+
+				pivotPoint = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 3), material);
+				pivotPoint.add(normalizedSpine);
+				pivotPoint.add(normalizedHead);
+				pivotPoint.add(normalizedLeft);
+				pivotPoint.add(normalizedRight);
+				scene.add(pivotPoint);
 				// renderer
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
