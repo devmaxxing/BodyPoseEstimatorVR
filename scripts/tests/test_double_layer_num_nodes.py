@@ -22,19 +22,9 @@ for num_trial in range(1,3):
     outputFile = open(sys.argv[3] + "_" + str(num_trial),'w')
     outputFile.write("Training data: " + sys.argv[1] + "\n")
     outputFile.write("Testing data: " + sys.argv[2] + "\n")
-    outputFile.write("Num nodes 2, Num nodes 1,5 nodes rot_avg,5 nodes rot_max,"+ 
-    "10 nodes rot_avg,10 nodes rot_max,"+ 
-    "15 nodes rot_avg,15 nodes rot_max,"+ 
-    "20 nodes rot_avg,20 nodes rot_max,"+ 
-    "25 nodes rot_avg,25 nodes rot_max,"+ 
-    "30 nodes rot_avg,30 nodes rot_max,"+
-    "35 nodes rot_avg,35 nodes rot_max,"+
-    "40 nodes rot_avg,40 nodes rot_max,"+
-    "45 nodes rot_avg,45 nodes rot_max,"+
-    "50 nodes rot_avg,50 nodes rot_max,"+"\n")
-    for num_nodes2 in range(5, 55, 5):
-        outputFile.write(str(num_nodes2) + ",")
-        for num_nodes1 in range(5,55,5):
+    outputFile.write("Num nodes 2, Num nodes 1, rot_avg, rot_max,"+"\n")
+    for num_nodes2 in range(5, 25, 2):
+        for num_nodes1 in range(5,25,2):
             print(str(num_nodes1) + " node layer...")
             inputLayer = Input(shape=(21,))
             hiddenLayer1 = Dense(num_nodes1)(inputLayer)
@@ -53,7 +43,7 @@ for num_trial in range(1,3):
             print(inputDataTrain.shape)
             outputDataTrain = array(p.ParseSpineRotation(dataFileTrain))
             print(outputDataTrain.shape)
-            history = model.fit(inputDataTrain, outputDataTrain, 32, 2000)
+            history = model.fit(inputDataTrain, outputDataTrain, 32, 1000)
 
             inputDataTest = array(p.Parse(dataFileTest))
             print(inputDataTest.shape)
@@ -77,8 +67,9 @@ for num_trial in range(1,3):
 
             print("sum avg_rot: " + str(avg_rot))
             print("sum max_rot: " + str(max_rot))
+            outputFile.write(str(num_nodes2) + ",")
+            outputFile.write(str(num_nodes1) + ",")
             outputFile.write(str(avg_rot) + ",")
             outputFile.write(str(max_rot) + ",")
-
-        outputFile.write("\n")
+            outputFile.write("\n")
 outputFile.close()

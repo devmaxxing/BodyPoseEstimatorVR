@@ -21,20 +21,20 @@ outputFile = open(sys.argv[3],'w')
 outputFile.write("Training data: " + sys.argv[1] + "\n")
 outputFile.write("Testing data: " + sys.argv[2] + "\n")
 outputFile.write("Trial Number,5 nodes rot_avg,5 nodes rot_max,"+ 
-"10 nodes rot_avg,10 nodes rot_max,"+ 
-"15 nodes rot_avg,15 nodes rot_max,"+ 
-"20 nodes rot_avg,20 nodes rot_max,"+ 
-"25 nodes rot_avg,25 nodes rot_max,"+ 
-"30 nodes rot_avg,30 nodes rot_max,"+
-"35 nodes rot_avg,35 nodes rot_max,"+
-"40 nodes rot_avg,40 nodes rot_max,"+
-"45 nodes rot_avg,45 nodes rot_max,"+
-"50 nodes rot_avg,50 nodes rot_max,"+"\n")
+"7 nodes rot_avg,7 nodes rot_max,"+ 
+"9 nodes rot_avg,9 nodes rot_max,"+ 
+"11 nodes rot_avg,11 nodes rot_max,"+ 
+"13 nodes rot_avg,13 nodes rot_max,"+ 
+"15 nodes rot_avg,15 nodes rot_max,"+
+"17 nodes rot_avg,17 nodes rot_max,"+
+"19 nodes rot_avg,19 nodes rot_max,"+
+"21 nodes rot_avg,21 nodes rot_max,"+
+"23 nodes rot_avg,23 nodes rot_max,"+"\n")
 
 for num_trial in range(1,4):
     print("Trial " + str(num_trial))
     outputFile.write(str(num_trial) + ",")
-    for num_nodes in range(5,55,5):
+    for num_nodes in range(5,25,2):
         print(str(num_nodes) + " node layer...")
         model = Sequential()
         model.add(Dense(num_nodes, input_shape = (21,)))
@@ -51,7 +51,7 @@ for num_trial in range(1,4):
         print(inputDataTrain.shape)
         outputDataTrain = array(p.ParseSpineRotation(dataFileTrain))
         print(outputDataTrain.shape)
-        history = model.fit(inputDataTrain, outputDataTrain, 32, 2000)
+        history = model.fit(inputDataTrain, outputDataTrain, 32, 1000)
 
         inputDataTest = array(p.Parse(dataFileTest))
         print(inputDataTest.shape)
