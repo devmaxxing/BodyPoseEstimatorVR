@@ -78,6 +78,7 @@ if len(sys.argv) > 3:
 
 #calculate differences
 e = Evaluator()
+print(outputDataTest)
 result, avg, maxdiff = e.Difference(outputDataTest, test)
 print("max: " + str(maxdiff))
 print("sum max: " + str(sum(maxdiff[:3])))

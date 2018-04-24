@@ -112,7 +112,7 @@ node {
   attr {
     key: "seed2"
     value {
-      i: 7666122
+      i: 7637743
     }
   }
 }
@@ -478,7 +478,7 @@ node {
   attr {
     key: "seed2"
     value {
-      i: 4429035
+      i: 8216146
     }
   }
 }
@@ -1863,12 +1863,6 @@ node {
       }
     }
   }
-  attr {
-    key: "index_type"
-    value {
-      type: DT_INT32
-    }
-  }
 }
 node {
   name: "training/Adam/gradients/loss/mul_grad/Mul"
@@ -3085,12 +3079,6 @@ node {
       }
     }
   }
-  attr {
-    key: "index_type"
-    value {
-      type: DT_INT32
-    }
-  }
 }
 node {
   name: "training/Adam/gradients/loss/dense_2_loss/Mean_1_grad/DynamicStitch"
@@ -3784,12 +3772,6 @@ node {
       }
     }
   }
-  attr {
-    key: "index_type"
-    value {
-      type: DT_INT32
-    }
-  }
 }
 node {
   name: "training/Adam/gradients/loss/dense_2_loss/Mean_grad/DynamicStitch"
@@ -4233,7 +4215,7 @@ node {
   }
 }
 node {
-  name: "training/Adam/gradients/loss/dense_2_loss/Square_grad/Mul/y"
+  name: "training/Adam/gradients/loss/dense_2_loss/Square_grad/mul/x"
   op: "Const"
   input: "^training/Adam/gradients/loss/dense_2_loss/Mean_grad/truediv"
   attr {
@@ -4263,10 +4245,10 @@ node {
   }
 }
 node {
-  name: "training/Adam/gradients/loss/dense_2_loss/Square_grad/Mul"
+  name: "training/Adam/gradients/loss/dense_2_loss/Square_grad/mul"
   op: "Mul"
+  input: "training/Adam/gradients/loss/dense_2_loss/Square_grad/mul/x"
   input: "loss/dense_2_loss/sub"
-  input: "training/Adam/gradients/loss/dense_2_loss/Square_grad/Mul/y"
   attr {
     key: "T"
     value {
@@ -4283,10 +4265,10 @@ node {
   }
 }
 node {
-  name: "training/Adam/gradients/loss/dense_2_loss/Square_grad/Mul_1"
+  name: "training/Adam/gradients/loss/dense_2_loss/Square_grad/mul_1"
   op: "Mul"
   input: "training/Adam/gradients/loss/dense_2_loss/Mean_grad/truediv"
-  input: "training/Adam/gradients/loss/dense_2_loss/Square_grad/Mul"
+  input: "training/Adam/gradients/loss/dense_2_loss/Square_grad/mul"
   attr {
     key: "T"
     value {
@@ -4375,7 +4357,7 @@ node {
 node {
   name: "training/Adam/gradients/loss/dense_2_loss/sub_grad/Sum"
   op: "Sum"
-  input: "training/Adam/gradients/loss/dense_2_loss/Square_grad/Mul_1"
+  input: "training/Adam/gradients/loss/dense_2_loss/Square_grad/mul_1"
   input: "training/Adam/gradients/loss/dense_2_loss/sub_grad/BroadcastGradientArgs"
   attr {
     key: "T"
@@ -4433,7 +4415,7 @@ node {
 node {
   name: "training/Adam/gradients/loss/dense_2_loss/sub_grad/Sum_1"
   op: "Sum"
-  input: "training/Adam/gradients/loss/dense_2_loss/Square_grad/Mul_1"
+  input: "training/Adam/gradients/loss/dense_2_loss/Square_grad/mul_1"
   input: "training/Adam/gradients/loss/dense_2_loss/sub_grad/BroadcastGradientArgs:1"
   attr {
     key: "T"
@@ -4974,31 +4956,7 @@ node {
   }
 }
 node {
-  name: "training/Adam/zeros/shape_as_tensor"
-  op: "Const"
-  attr {
-    key: "dtype"
-    value {
-      type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\025\000\000\000\013\000\000\000"
-      }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros/Const"
+  name: "training/Adam/zeros"
   op: "Const"
   attr {
     key: "dtype"
@@ -5012,27 +4970,15 @@ node {
       tensor {
         dtype: DT_FLOAT
         tensor_shape {
+          dim {
+            size: 21
+          }
+          dim {
+            size: 11
+          }
         }
         float_val: 0.0
       }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros"
-  op: "Fill"
-  input: "training/Adam/zeros/shape_as_tensor"
-  input: "training/Adam/zeros/Const"
-  attr {
-    key: "T"
-    value {
-      type: DT_FLOAT
-    }
-  }
-  attr {
-    key: "index_type"
-    value {
-      type: DT_INT32
     }
   }
 }
@@ -5123,31 +5069,7 @@ node {
   }
 }
 node {
-  name: "training/Adam/zeros_1/shape_as_tensor"
-  op: "Const"
-  attr {
-    key: "dtype"
-    value {
-      type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 1
-          }
-        }
-        int_val: 11
-      }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros_1/Const"
+  name: "training/Adam/zeros_1"
   op: "Const"
   attr {
     key: "dtype"
@@ -5161,27 +5083,12 @@ node {
       tensor {
         dtype: DT_FLOAT
         tensor_shape {
+          dim {
+            size: 11
+          }
         }
         float_val: 0.0
       }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros_1"
-  op: "Fill"
-  input: "training/Adam/zeros_1/shape_as_tensor"
-  input: "training/Adam/zeros_1/Const"
-  attr {
-    key: "T"
-    value {
-      type: DT_FLOAT
-    }
-  }
-  attr {
-    key: "index_type"
-    value {
-      type: DT_INT32
     }
   }
 }
@@ -5269,31 +5176,7 @@ node {
   }
 }
 node {
-  name: "training/Adam/zeros_2/shape_as_tensor"
-  op: "Const"
-  attr {
-    key: "dtype"
-    value {
-      type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\013\000\000\000\003\000\000\000"
-      }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros_2/Const"
+  name: "training/Adam/zeros_2"
   op: "Const"
   attr {
     key: "dtype"
@@ -5307,27 +5190,15 @@ node {
       tensor {
         dtype: DT_FLOAT
         tensor_shape {
+          dim {
+            size: 11
+          }
+          dim {
+            size: 3
+          }
         }
         float_val: 0.0
       }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros_2"
-  op: "Fill"
-  input: "training/Adam/zeros_2/shape_as_tensor"
-  input: "training/Adam/zeros_2/Const"
-  attr {
-    key: "T"
-    value {
-      type: DT_FLOAT
-    }
-  }
-  attr {
-    key: "index_type"
-    value {
-      type: DT_INT32
     }
   }
 }
@@ -5418,31 +5289,7 @@ node {
   }
 }
 node {
-  name: "training/Adam/zeros_3/shape_as_tensor"
-  op: "Const"
-  attr {
-    key: "dtype"
-    value {
-      type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 1
-          }
-        }
-        int_val: 3
-      }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros_3/Const"
+  name: "training/Adam/zeros_3"
   op: "Const"
   attr {
     key: "dtype"
@@ -5456,27 +5303,12 @@ node {
       tensor {
         dtype: DT_FLOAT
         tensor_shape {
+          dim {
+            size: 3
+          }
         }
         float_val: 0.0
       }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros_3"
-  op: "Fill"
-  input: "training/Adam/zeros_3/shape_as_tensor"
-  input: "training/Adam/zeros_3/Const"
-  attr {
-    key: "T"
-    value {
-      type: DT_FLOAT
-    }
-  }
-  attr {
-    key: "index_type"
-    value {
-      type: DT_INT32
     }
   }
 }
@@ -5564,31 +5396,7 @@ node {
   }
 }
 node {
-  name: "training/Adam/zeros_4/shape_as_tensor"
-  op: "Const"
-  attr {
-    key: "dtype"
-    value {
-      type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\025\000\000\000\013\000\000\000"
-      }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros_4/Const"
+  name: "training/Adam/zeros_4"
   op: "Const"
   attr {
     key: "dtype"
@@ -5602,27 +5410,15 @@ node {
       tensor {
         dtype: DT_FLOAT
         tensor_shape {
+          dim {
+            size: 21
+          }
+          dim {
+            size: 11
+          }
         }
         float_val: 0.0
       }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros_4"
-  op: "Fill"
-  input: "training/Adam/zeros_4/shape_as_tensor"
-  input: "training/Adam/zeros_4/Const"
-  attr {
-    key: "T"
-    value {
-      type: DT_FLOAT
-    }
-  }
-  attr {
-    key: "index_type"
-    value {
-      type: DT_INT32
     }
   }
 }
@@ -5713,31 +5509,7 @@ node {
   }
 }
 node {
-  name: "training/Adam/zeros_5/shape_as_tensor"
-  op: "Const"
-  attr {
-    key: "dtype"
-    value {
-      type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 1
-          }
-        }
-        int_val: 11
-      }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros_5/Const"
+  name: "training/Adam/zeros_5"
   op: "Const"
   attr {
     key: "dtype"
@@ -5751,27 +5523,12 @@ node {
       tensor {
         dtype: DT_FLOAT
         tensor_shape {
+          dim {
+            size: 11
+          }
         }
         float_val: 0.0
       }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros_5"
-  op: "Fill"
-  input: "training/Adam/zeros_5/shape_as_tensor"
-  input: "training/Adam/zeros_5/Const"
-  attr {
-    key: "T"
-    value {
-      type: DT_FLOAT
-    }
-  }
-  attr {
-    key: "index_type"
-    value {
-      type: DT_INT32
     }
   }
 }
@@ -5859,31 +5616,7 @@ node {
   }
 }
 node {
-  name: "training/Adam/zeros_6/shape_as_tensor"
-  op: "Const"
-  attr {
-    key: "dtype"
-    value {
-      type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\013\000\000\000\003\000\000\000"
-      }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros_6/Const"
+  name: "training/Adam/zeros_6"
   op: "Const"
   attr {
     key: "dtype"
@@ -5897,27 +5630,15 @@ node {
       tensor {
         dtype: DT_FLOAT
         tensor_shape {
+          dim {
+            size: 11
+          }
+          dim {
+            size: 3
+          }
         }
         float_val: 0.0
       }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros_6"
-  op: "Fill"
-  input: "training/Adam/zeros_6/shape_as_tensor"
-  input: "training/Adam/zeros_6/Const"
-  attr {
-    key: "T"
-    value {
-      type: DT_FLOAT
-    }
-  }
-  attr {
-    key: "index_type"
-    value {
-      type: DT_INT32
     }
   }
 }
@@ -6008,31 +5729,7 @@ node {
   }
 }
 node {
-  name: "training/Adam/zeros_7/shape_as_tensor"
-  op: "Const"
-  attr {
-    key: "dtype"
-    value {
-      type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 1
-          }
-        }
-        int_val: 3
-      }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros_7/Const"
+  name: "training/Adam/zeros_7"
   op: "Const"
   attr {
     key: "dtype"
@@ -6046,27 +5743,12 @@ node {
       tensor {
         dtype: DT_FLOAT
         tensor_shape {
+          dim {
+            size: 3
+          }
         }
         float_val: 0.0
       }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros_7"
-  op: "Fill"
-  input: "training/Adam/zeros_7/shape_as_tensor"
-  input: "training/Adam/zeros_7/Const"
-  attr {
-    key: "T"
-    value {
-      type: DT_FLOAT
-    }
-  }
-  attr {
-    key: "index_type"
-    value {
-      type: DT_INT32
     }
   }
 }
@@ -6154,31 +5836,7 @@ node {
   }
 }
 node {
-  name: "training/Adam/zeros_8/shape_as_tensor"
-  op: "Const"
-  attr {
-    key: "dtype"
-    value {
-      type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 1
-          }
-        }
-        int_val: 1
-      }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros_8/Const"
+  name: "training/Adam/zeros_8"
   op: "Const"
   attr {
     key: "dtype"
@@ -6192,27 +5850,12 @@ node {
       tensor {
         dtype: DT_FLOAT
         tensor_shape {
+          dim {
+            size: 1
+          }
         }
         float_val: 0.0
       }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros_8"
-  op: "Fill"
-  input: "training/Adam/zeros_8/shape_as_tensor"
-  input: "training/Adam/zeros_8/Const"
-  attr {
-    key: "T"
-    value {
-      type: DT_FLOAT
-    }
-  }
-  attr {
-    key: "index_type"
-    value {
-      type: DT_INT32
     }
   }
 }
@@ -6300,31 +5943,7 @@ node {
   }
 }
 node {
-  name: "training/Adam/zeros_9/shape_as_tensor"
-  op: "Const"
-  attr {
-    key: "dtype"
-    value {
-      type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 1
-          }
-        }
-        int_val: 1
-      }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros_9/Const"
+  name: "training/Adam/zeros_9"
   op: "Const"
   attr {
     key: "dtype"
@@ -6338,27 +5957,12 @@ node {
       tensor {
         dtype: DT_FLOAT
         tensor_shape {
+          dim {
+            size: 1
+          }
         }
         float_val: 0.0
       }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros_9"
-  op: "Fill"
-  input: "training/Adam/zeros_9/shape_as_tensor"
-  input: "training/Adam/zeros_9/Const"
-  attr {
-    key: "T"
-    value {
-      type: DT_FLOAT
-    }
-  }
-  attr {
-    key: "index_type"
-    value {
-      type: DT_INT32
     }
   }
 }
@@ -6446,31 +6050,7 @@ node {
   }
 }
 node {
-  name: "training/Adam/zeros_10/shape_as_tensor"
-  op: "Const"
-  attr {
-    key: "dtype"
-    value {
-      type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 1
-          }
-        }
-        int_val: 1
-      }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros_10/Const"
+  name: "training/Adam/zeros_10"
   op: "Const"
   attr {
     key: "dtype"
@@ -6484,27 +6064,12 @@ node {
       tensor {
         dtype: DT_FLOAT
         tensor_shape {
+          dim {
+            size: 1
+          }
         }
         float_val: 0.0
       }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros_10"
-  op: "Fill"
-  input: "training/Adam/zeros_10/shape_as_tensor"
-  input: "training/Adam/zeros_10/Const"
-  attr {
-    key: "T"
-    value {
-      type: DT_FLOAT
-    }
-  }
-  attr {
-    key: "index_type"
-    value {
-      type: DT_INT32
     }
   }
 }
@@ -6592,31 +6157,7 @@ node {
   }
 }
 node {
-  name: "training/Adam/zeros_11/shape_as_tensor"
-  op: "Const"
-  attr {
-    key: "dtype"
-    value {
-      type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 1
-          }
-        }
-        int_val: 1
-      }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros_11/Const"
+  name: "training/Adam/zeros_11"
   op: "Const"
   attr {
     key: "dtype"
@@ -6630,27 +6171,12 @@ node {
       tensor {
         dtype: DT_FLOAT
         tensor_shape {
+          dim {
+            size: 1
+          }
         }
         float_val: 0.0
       }
-    }
-  }
-}
-node {
-  name: "training/Adam/zeros_11"
-  op: "Fill"
-  input: "training/Adam/zeros_11/shape_as_tensor"
-  input: "training/Adam/zeros_11/Const"
-  attr {
-    key: "T"
-    value {
-      type: DT_FLOAT
-    }
-  }
-  attr {
-    key: "index_type"
-    value {
-      type: DT_INT32
     }
   }
 }
@@ -8932,7 +8458,6 @@ node {
 node {
   name: "save/RestoreV2/tensor_names"
   op: "Const"
-  device: "/device:CPU:0"
   attr {
     key: "dtype"
     value {
@@ -8946,30 +8471,10 @@ node {
         dtype: DT_STRING
         tensor_shape {
           dim {
-            size: 21
+            size: 1
           }
         }
         string_val: "Adam/beta_1"
-        string_val: "Adam/beta_2"
-        string_val: "Adam/decay"
-        string_val: "Adam/iterations"
-        string_val: "Adam/lr"
-        string_val: "dense_1/bias"
-        string_val: "dense_1/kernel"
-        string_val: "dense_2/bias"
-        string_val: "dense_2/kernel"
-        string_val: "training/Adam/Variable"
-        string_val: "training/Adam/Variable_1"
-        string_val: "training/Adam/Variable_10"
-        string_val: "training/Adam/Variable_11"
-        string_val: "training/Adam/Variable_2"
-        string_val: "training/Adam/Variable_3"
-        string_val: "training/Adam/Variable_4"
-        string_val: "training/Adam/Variable_5"
-        string_val: "training/Adam/Variable_6"
-        string_val: "training/Adam/Variable_7"
-        string_val: "training/Adam/Variable_8"
-        string_val: "training/Adam/Variable_9"
       }
     }
   }
@@ -8977,7 +8482,6 @@ node {
 node {
   name: "save/RestoreV2/shape_and_slices"
   op: "Const"
-  device: "/device:CPU:0"
   attr {
     key: "dtype"
     value {
@@ -8991,29 +8495,9 @@ node {
         dtype: DT_STRING
         tensor_shape {
           dim {
-            size: 21
+            size: 1
           }
         }
-        string_val: ""
-        string_val: ""
-        string_val: ""
-        string_val: ""
-        string_val: ""
-        string_val: ""
-        string_val: ""
-        string_val: ""
-        string_val: ""
-        string_val: ""
-        string_val: ""
-        string_val: ""
-        string_val: ""
-        string_val: ""
-        string_val: ""
-        string_val: ""
-        string_val: ""
-        string_val: ""
-        string_val: ""
-        string_val: ""
         string_val: ""
       }
     }
@@ -9025,31 +8509,10 @@ node {
   input: "save/Const"
   input: "save/RestoreV2/tensor_names"
   input: "save/RestoreV2/shape_and_slices"
-  device: "/device:CPU:0"
   attr {
     key: "dtypes"
     value {
       list {
-        type: DT_FLOAT
-        type: DT_FLOAT
-        type: DT_FLOAT
-        type: DT_INT64
-        type: DT_FLOAT
-        type: DT_FLOAT
-        type: DT_FLOAT
-        type: DT_FLOAT
-        type: DT_FLOAT
-        type: DT_FLOAT
-        type: DT_FLOAT
-        type: DT_FLOAT
-        type: DT_FLOAT
-        type: DT_FLOAT
-        type: DT_FLOAT
-        type: DT_FLOAT
-        type: DT_FLOAT
-        type: DT_FLOAT
-        type: DT_FLOAT
-        type: DT_FLOAT
         type: DT_FLOAT
       }
     }
@@ -9088,10 +8551,73 @@ node {
   }
 }
 node {
+  name: "save/RestoreV2_1/tensor_names"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: "Adam/beta_2"
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_1/shape_and_slices"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: ""
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_1"
+  op: "RestoreV2"
+  input: "save/Const"
+  input: "save/RestoreV2_1/tensor_names"
+  input: "save/RestoreV2_1/shape_and_slices"
+  attr {
+    key: "dtypes"
+    value {
+      list {
+        type: DT_FLOAT
+      }
+    }
+  }
+}
+node {
   name: "save/Assign_1"
   op: "Assign"
   input: "Adam/beta_2"
-  input: "save/RestoreV2:1"
+  input: "save/RestoreV2_1"
   attr {
     key: "T"
     value {
@@ -9120,10 +8646,73 @@ node {
   }
 }
 node {
+  name: "save/RestoreV2_2/tensor_names"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: "Adam/decay"
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_2/shape_and_slices"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: ""
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_2"
+  op: "RestoreV2"
+  input: "save/Const"
+  input: "save/RestoreV2_2/tensor_names"
+  input: "save/RestoreV2_2/shape_and_slices"
+  attr {
+    key: "dtypes"
+    value {
+      list {
+        type: DT_FLOAT
+      }
+    }
+  }
+}
+node {
   name: "save/Assign_2"
   op: "Assign"
   input: "Adam/decay"
-  input: "save/RestoreV2:2"
+  input: "save/RestoreV2_2"
   attr {
     key: "T"
     value {
@@ -9152,10 +8741,73 @@ node {
   }
 }
 node {
+  name: "save/RestoreV2_3/tensor_names"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: "Adam/iterations"
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_3/shape_and_slices"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: ""
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_3"
+  op: "RestoreV2"
+  input: "save/Const"
+  input: "save/RestoreV2_3/tensor_names"
+  input: "save/RestoreV2_3/shape_and_slices"
+  attr {
+    key: "dtypes"
+    value {
+      list {
+        type: DT_INT64
+      }
+    }
+  }
+}
+node {
   name: "save/Assign_3"
   op: "Assign"
   input: "Adam/iterations"
-  input: "save/RestoreV2:3"
+  input: "save/RestoreV2_3"
   attr {
     key: "T"
     value {
@@ -9184,10 +8836,73 @@ node {
   }
 }
 node {
+  name: "save/RestoreV2_4/tensor_names"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: "Adam/lr"
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_4/shape_and_slices"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: ""
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_4"
+  op: "RestoreV2"
+  input: "save/Const"
+  input: "save/RestoreV2_4/tensor_names"
+  input: "save/RestoreV2_4/shape_and_slices"
+  attr {
+    key: "dtypes"
+    value {
+      list {
+        type: DT_FLOAT
+      }
+    }
+  }
+}
+node {
   name: "save/Assign_4"
   op: "Assign"
   input: "Adam/lr"
-  input: "save/RestoreV2:4"
+  input: "save/RestoreV2_4"
   attr {
     key: "T"
     value {
@@ -9216,10 +8931,73 @@ node {
   }
 }
 node {
+  name: "save/RestoreV2_5/tensor_names"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: "dense_1/bias"
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_5/shape_and_slices"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: ""
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_5"
+  op: "RestoreV2"
+  input: "save/Const"
+  input: "save/RestoreV2_5/tensor_names"
+  input: "save/RestoreV2_5/shape_and_slices"
+  attr {
+    key: "dtypes"
+    value {
+      list {
+        type: DT_FLOAT
+      }
+    }
+  }
+}
+node {
   name: "save/Assign_5"
   op: "Assign"
   input: "dense_1/bias"
-  input: "save/RestoreV2:5"
+  input: "save/RestoreV2_5"
   attr {
     key: "T"
     value {
@@ -9248,10 +9026,73 @@ node {
   }
 }
 node {
+  name: "save/RestoreV2_6/tensor_names"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: "dense_1/kernel"
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_6/shape_and_slices"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: ""
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_6"
+  op: "RestoreV2"
+  input: "save/Const"
+  input: "save/RestoreV2_6/tensor_names"
+  input: "save/RestoreV2_6/shape_and_slices"
+  attr {
+    key: "dtypes"
+    value {
+      list {
+        type: DT_FLOAT
+      }
+    }
+  }
+}
+node {
   name: "save/Assign_6"
   op: "Assign"
   input: "dense_1/kernel"
-  input: "save/RestoreV2:6"
+  input: "save/RestoreV2_6"
   attr {
     key: "T"
     value {
@@ -9280,10 +9121,73 @@ node {
   }
 }
 node {
+  name: "save/RestoreV2_7/tensor_names"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: "dense_2/bias"
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_7/shape_and_slices"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: ""
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_7"
+  op: "RestoreV2"
+  input: "save/Const"
+  input: "save/RestoreV2_7/tensor_names"
+  input: "save/RestoreV2_7/shape_and_slices"
+  attr {
+    key: "dtypes"
+    value {
+      list {
+        type: DT_FLOAT
+      }
+    }
+  }
+}
+node {
   name: "save/Assign_7"
   op: "Assign"
   input: "dense_2/bias"
-  input: "save/RestoreV2:7"
+  input: "save/RestoreV2_7"
   attr {
     key: "T"
     value {
@@ -9312,10 +9216,73 @@ node {
   }
 }
 node {
+  name: "save/RestoreV2_8/tensor_names"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: "dense_2/kernel"
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_8/shape_and_slices"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: ""
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_8"
+  op: "RestoreV2"
+  input: "save/Const"
+  input: "save/RestoreV2_8/tensor_names"
+  input: "save/RestoreV2_8/shape_and_slices"
+  attr {
+    key: "dtypes"
+    value {
+      list {
+        type: DT_FLOAT
+      }
+    }
+  }
+}
+node {
   name: "save/Assign_8"
   op: "Assign"
   input: "dense_2/kernel"
-  input: "save/RestoreV2:8"
+  input: "save/RestoreV2_8"
   attr {
     key: "T"
     value {
@@ -9344,10 +9311,73 @@ node {
   }
 }
 node {
+  name: "save/RestoreV2_9/tensor_names"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: "training/Adam/Variable"
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_9/shape_and_slices"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: ""
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_9"
+  op: "RestoreV2"
+  input: "save/Const"
+  input: "save/RestoreV2_9/tensor_names"
+  input: "save/RestoreV2_9/shape_and_slices"
+  attr {
+    key: "dtypes"
+    value {
+      list {
+        type: DT_FLOAT
+      }
+    }
+  }
+}
+node {
   name: "save/Assign_9"
   op: "Assign"
   input: "training/Adam/Variable"
-  input: "save/RestoreV2:9"
+  input: "save/RestoreV2_9"
   attr {
     key: "T"
     value {
@@ -9376,10 +9406,73 @@ node {
   }
 }
 node {
+  name: "save/RestoreV2_10/tensor_names"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: "training/Adam/Variable_1"
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_10/shape_and_slices"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: ""
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_10"
+  op: "RestoreV2"
+  input: "save/Const"
+  input: "save/RestoreV2_10/tensor_names"
+  input: "save/RestoreV2_10/shape_and_slices"
+  attr {
+    key: "dtypes"
+    value {
+      list {
+        type: DT_FLOAT
+      }
+    }
+  }
+}
+node {
   name: "save/Assign_10"
   op: "Assign"
   input: "training/Adam/Variable_1"
-  input: "save/RestoreV2:10"
+  input: "save/RestoreV2_10"
   attr {
     key: "T"
     value {
@@ -9408,10 +9501,73 @@ node {
   }
 }
 node {
+  name: "save/RestoreV2_11/tensor_names"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: "training/Adam/Variable_10"
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_11/shape_and_slices"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: ""
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_11"
+  op: "RestoreV2"
+  input: "save/Const"
+  input: "save/RestoreV2_11/tensor_names"
+  input: "save/RestoreV2_11/shape_and_slices"
+  attr {
+    key: "dtypes"
+    value {
+      list {
+        type: DT_FLOAT
+      }
+    }
+  }
+}
+node {
   name: "save/Assign_11"
   op: "Assign"
   input: "training/Adam/Variable_10"
-  input: "save/RestoreV2:11"
+  input: "save/RestoreV2_11"
   attr {
     key: "T"
     value {
@@ -9440,10 +9596,73 @@ node {
   }
 }
 node {
+  name: "save/RestoreV2_12/tensor_names"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: "training/Adam/Variable_11"
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_12/shape_and_slices"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: ""
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_12"
+  op: "RestoreV2"
+  input: "save/Const"
+  input: "save/RestoreV2_12/tensor_names"
+  input: "save/RestoreV2_12/shape_and_slices"
+  attr {
+    key: "dtypes"
+    value {
+      list {
+        type: DT_FLOAT
+      }
+    }
+  }
+}
+node {
   name: "save/Assign_12"
   op: "Assign"
   input: "training/Adam/Variable_11"
-  input: "save/RestoreV2:12"
+  input: "save/RestoreV2_12"
   attr {
     key: "T"
     value {
@@ -9472,10 +9691,73 @@ node {
   }
 }
 node {
+  name: "save/RestoreV2_13/tensor_names"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: "training/Adam/Variable_2"
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_13/shape_and_slices"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: ""
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_13"
+  op: "RestoreV2"
+  input: "save/Const"
+  input: "save/RestoreV2_13/tensor_names"
+  input: "save/RestoreV2_13/shape_and_slices"
+  attr {
+    key: "dtypes"
+    value {
+      list {
+        type: DT_FLOAT
+      }
+    }
+  }
+}
+node {
   name: "save/Assign_13"
   op: "Assign"
   input: "training/Adam/Variable_2"
-  input: "save/RestoreV2:13"
+  input: "save/RestoreV2_13"
   attr {
     key: "T"
     value {
@@ -9504,10 +9786,73 @@ node {
   }
 }
 node {
+  name: "save/RestoreV2_14/tensor_names"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: "training/Adam/Variable_3"
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_14/shape_and_slices"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: ""
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_14"
+  op: "RestoreV2"
+  input: "save/Const"
+  input: "save/RestoreV2_14/tensor_names"
+  input: "save/RestoreV2_14/shape_and_slices"
+  attr {
+    key: "dtypes"
+    value {
+      list {
+        type: DT_FLOAT
+      }
+    }
+  }
+}
+node {
   name: "save/Assign_14"
   op: "Assign"
   input: "training/Adam/Variable_3"
-  input: "save/RestoreV2:14"
+  input: "save/RestoreV2_14"
   attr {
     key: "T"
     value {
@@ -9536,10 +9881,73 @@ node {
   }
 }
 node {
+  name: "save/RestoreV2_15/tensor_names"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: "training/Adam/Variable_4"
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_15/shape_and_slices"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: ""
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_15"
+  op: "RestoreV2"
+  input: "save/Const"
+  input: "save/RestoreV2_15/tensor_names"
+  input: "save/RestoreV2_15/shape_and_slices"
+  attr {
+    key: "dtypes"
+    value {
+      list {
+        type: DT_FLOAT
+      }
+    }
+  }
+}
+node {
   name: "save/Assign_15"
   op: "Assign"
   input: "training/Adam/Variable_4"
-  input: "save/RestoreV2:15"
+  input: "save/RestoreV2_15"
   attr {
     key: "T"
     value {
@@ -9568,10 +9976,73 @@ node {
   }
 }
 node {
+  name: "save/RestoreV2_16/tensor_names"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: "training/Adam/Variable_5"
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_16/shape_and_slices"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: ""
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_16"
+  op: "RestoreV2"
+  input: "save/Const"
+  input: "save/RestoreV2_16/tensor_names"
+  input: "save/RestoreV2_16/shape_and_slices"
+  attr {
+    key: "dtypes"
+    value {
+      list {
+        type: DT_FLOAT
+      }
+    }
+  }
+}
+node {
   name: "save/Assign_16"
   op: "Assign"
   input: "training/Adam/Variable_5"
-  input: "save/RestoreV2:16"
+  input: "save/RestoreV2_16"
   attr {
     key: "T"
     value {
@@ -9600,10 +10071,73 @@ node {
   }
 }
 node {
+  name: "save/RestoreV2_17/tensor_names"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: "training/Adam/Variable_6"
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_17/shape_and_slices"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: ""
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_17"
+  op: "RestoreV2"
+  input: "save/Const"
+  input: "save/RestoreV2_17/tensor_names"
+  input: "save/RestoreV2_17/shape_and_slices"
+  attr {
+    key: "dtypes"
+    value {
+      list {
+        type: DT_FLOAT
+      }
+    }
+  }
+}
+node {
   name: "save/Assign_17"
   op: "Assign"
   input: "training/Adam/Variable_6"
-  input: "save/RestoreV2:17"
+  input: "save/RestoreV2_17"
   attr {
     key: "T"
     value {
@@ -9632,10 +10166,73 @@ node {
   }
 }
 node {
+  name: "save/RestoreV2_18/tensor_names"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: "training/Adam/Variable_7"
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_18/shape_and_slices"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: ""
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_18"
+  op: "RestoreV2"
+  input: "save/Const"
+  input: "save/RestoreV2_18/tensor_names"
+  input: "save/RestoreV2_18/shape_and_slices"
+  attr {
+    key: "dtypes"
+    value {
+      list {
+        type: DT_FLOAT
+      }
+    }
+  }
+}
+node {
   name: "save/Assign_18"
   op: "Assign"
   input: "training/Adam/Variable_7"
-  input: "save/RestoreV2:18"
+  input: "save/RestoreV2_18"
   attr {
     key: "T"
     value {
@@ -9664,10 +10261,73 @@ node {
   }
 }
 node {
+  name: "save/RestoreV2_19/tensor_names"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: "training/Adam/Variable_8"
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_19/shape_and_slices"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: ""
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_19"
+  op: "RestoreV2"
+  input: "save/Const"
+  input: "save/RestoreV2_19/tensor_names"
+  input: "save/RestoreV2_19/shape_and_slices"
+  attr {
+    key: "dtypes"
+    value {
+      list {
+        type: DT_FLOAT
+      }
+    }
+  }
+}
+node {
   name: "save/Assign_19"
   op: "Assign"
   input: "training/Adam/Variable_8"
-  input: "save/RestoreV2:19"
+  input: "save/RestoreV2_19"
   attr {
     key: "T"
     value {
@@ -9696,10 +10356,73 @@ node {
   }
 }
 node {
+  name: "save/RestoreV2_20/tensor_names"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: "training/Adam/Variable_9"
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_20/shape_and_slices"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        string_val: ""
+      }
+    }
+  }
+}
+node {
+  name: "save/RestoreV2_20"
+  op: "RestoreV2"
+  input: "save/Const"
+  input: "save/RestoreV2_20/tensor_names"
+  input: "save/RestoreV2_20/shape_and_slices"
+  attr {
+    key: "dtypes"
+    value {
+      list {
+        type: DT_FLOAT
+      }
+    }
+  }
+}
+node {
   name: "save/Assign_20"
   op: "Assign"
   input: "training/Adam/Variable_9"
-  input: "save/RestoreV2:20"
+  input: "save/RestoreV2_20"
   attr {
     key: "T"
     value {
@@ -9753,5 +10476,5 @@ node {
   input: "^save/Assign_20"
 }
 versions {
-  producer: 26
+  producer: 24
 }
