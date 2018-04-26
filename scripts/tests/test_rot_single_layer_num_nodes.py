@@ -20,21 +20,30 @@ def weighted_mean_squared_error(y_true, y_pred):
 outputFile = open(sys.argv[3],'w')
 outputFile.write("Training data: " + sys.argv[1] + "\n")
 outputFile.write("Testing data: " + sys.argv[2] + "\n")
-outputFile.write("Trial Number,5 nodes rot_avg,5 nodes rot_max,"+ 
+outputFile.write("Trial Number,3 nodes rot_avg,3 nodes rot_max,"+ 
+"4 nodes rot_avg,4 nodes rot_max,"+ 
+"5 nodes rot_avg,5 nodes rot_max,"+ 
+"6 nodes rot_avg,6 nodes rot_max,"+ 
 "7 nodes rot_avg,7 nodes rot_max,"+ 
+"8 nodes rot_avg,8 nodes rot_max,"+ 
 "9 nodes rot_avg,9 nodes rot_max,"+ 
+"10 nodes rot_avg,10 nodes rot_max,"+ 
 "11 nodes rot_avg,11 nodes rot_max,"+ 
+"12 nodes rot_avg,12 nodes rot_max,"+ 
 "13 nodes rot_avg,13 nodes rot_max,"+ 
-"15 nodes rot_avg,15 nodes rot_max,"+
-"17 nodes rot_avg,17 nodes rot_max,"+
-"19 nodes rot_avg,19 nodes rot_max,"+
-"21 nodes rot_avg,21 nodes rot_max,"+
-"23 nodes rot_avg,23 nodes rot_max,"+"\n")
+"14 nodes rot_avg,14 nodes rot_max,"+ 
+"15 nodes rot_avg,15 nodes rot_max,"+ 
+"16 nodes rot_avg,16 nodes rot_max,"+ 
+"17 nodes rot_avg,17 nodes rot_max,"+ 
+"18 nodes rot_avg,18 nodes rot_max,"+ 
+"19 nodes rot_avg,19 nodes rot_max,"+ 
+"20 nodes rot_avg,20 nodes rot_max,"+ 
+"21 nodes rot_avg,21 nodes rot_max,"+ "\n")
 
 for num_trial in range(1,4):
     print("Trial " + str(num_trial))
     outputFile.write(str(num_trial) + ",")
-    for num_nodes in range(5,25,2):
+    for num_nodes in range(3,22,1):
         print(str(num_nodes) + " node layer...")
         model = Sequential()
         model.add(Dense(num_nodes, input_shape = (21,)))

@@ -17,14 +17,15 @@ def weighted_mean_squared_error(y_true, y_pred):
     weights = array([20, 20, 20, 20, 1, 1, 1])
     return K.mean(K.square((difference*weights)), axis=-1)
 
-for num_trial in range(1,3):
+outputFile = open(sys.argv[3],'w')
+outputFile.write("Training data: " + sys.argv[1] + "\n")
+outputFile.write("Testing data: " + sys.argv[2] + "\n")
+outputFile.write("Num nodes 2, Num nodes 1, rot_avg, rot_max,"+"\n")
+
+for num_trial in range(1,4):
     print("Trial " + str(num_trial))
-    outputFile = open(sys.argv[3] + "_" + str(num_trial),'w')
-    outputFile.write("Training data: " + sys.argv[1] + "\n")
-    outputFile.write("Testing data: " + sys.argv[2] + "\n")
-    outputFile.write("Num nodes 2, Num nodes 1, rot_avg, rot_max,"+"\n")
-    for num_nodes2 in range(5, 25, 2):
-        for num_nodes1 in range(5,25,2):
+    for num_nodes2 in range(3, 22, 1):
+        for num_nodes1 in range(3, num_nodes2,1):
             print(str(num_nodes1) + " node layer...")
             inputLayer = Input(shape=(21,))
             hiddenLayer1 = Dense(num_nodes1)(inputLayer)
