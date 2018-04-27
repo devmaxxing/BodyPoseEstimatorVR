@@ -11,6 +11,9 @@ from numpy import array
 import json
 import matplotlib.pyplot as plt
 import keras.backend as K
+import tensorflow as tf
+from tensorflow.python.tools import freeze_graph
+from tensorflow.python.saved_model import builder as saved_model_builder
 
 def weighted_mean_squared_error(y_true, y_pred):
     difference = y_pred - y_true
@@ -40,7 +43,19 @@ outputFile.write("Trial Number,3 nodes rot_avg,3 nodes rot_max,"+
 "20 nodes rot_avg,20 nodes rot_max,"+ 
 "21 nodes rot_avg,21 nodes rot_max,"+ "\n")
 
-for num_trial in range(1,4):
+p = Parser()
+dataFileTrain = sys.argv[1]
+dataFileTest = sys.argv[2]
+
+inputDataTrain = array(p.Parse(dataFileTrain))
+outputDataTrain = array(p.ParseSpineRotation(dataFileTrain))
+
+inputDataTest = array(p.Parse(dataFileTest))
+outputDataTest = array(p.ParseSpineRotation(dataFileTest))
+
+thresholdMean = 0.19
+
+for num_trial in range(1,16):
     print("Trial " + str(num_trial))
     outputFile.write(str(num_trial) + ",")
     for num_nodes in range(3,22,1):
@@ -52,22 +67,15 @@ for num_trial in range(1,4):
               loss='mean_squared_error',
               metrics=['accuracy'])
 
-        p = Parser()
-        dataFileTrain = sys.argv[1]
-        dataFileTest = sys.argv[2]
-
-        inputDataTrain = array(p.Parse(dataFileTrain))
-        print(inputDataTrain.shape)
-        outputDataTrain = array(p.ParseSpineRotation(dataFileTrain))
-        print(outputDataTrain.shape)
         history = model.fit(inputDataTrain, outputDataTrain, 32, 1000)
 
-        inputDataTest = array(p.Parse(dataFileTest))
-        print(inputDataTest.shape)
-        outputDataTest = array(p.ParseSpineRotation(dataFileTest))
-        print(outputDataTest.shape)
-        loss_and_metrics = model.evaluate(inputDataTest, outputDataTest)
-        print(loss_and_metrics)
+        export_path = "freeze_rot"
+        tf.train.Saver().save(K.get_session(), export_path + '/checkpoint.ckpt')
+
+        tf.train.write_graph(K.get_session().graph.as_graph_def(),
+                            export_path, 'graph.pbtxt', as_text=True)
+        tf.train.write_graph(K.get_session().graph.as_graph_def(),
+                            export_path, 'graph.pb', as_text=False)
 
         #test the model
         test = model.predict(inputDataTest, 1)
@@ -82,10 +90,22 @@ for num_trial in range(1,4):
         avg_rot = sum(avg[:3])
         max_rot = sum(maxdiff[:3])
 
+        if avg_rot <= thresholdMean:
+            freeze_graph.freeze_graph(input_graph = export_path +'/graph.pbtxt',
+            input_binary = False,
+            input_checkpoint = export_path + '/checkpoint.ckpt',
+            output_node_names = "dense_2/BiasAdd",
+            output_graph = export_path +'/model' + "_" + str(num_nodes) + "_" + str(num_trial) + "_" + '.bytes' ,
+            clear_devices = True, initializer_nodes = "",input_saver = "",
+            restore_op_name = "save/restore_all", filename_tensor_name = "save/Const:0")
+
         print("sum avg_rot: " + str(avg_rot))
         print("sum max_rot: " + str(max_rot))
         outputFile.write(str(avg_rot) + ",")
         outputFile.write(str(max_rot) + ",")
+        K.clear_session()
+        sess = tf.Session()
+        K.set_session(sess)
 
     outputFile.write("\n")
 outputFile.close()
